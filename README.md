@@ -4,7 +4,7 @@ My assignment was:
   Implement hierarchy of disposable tableware. Add option of searching items made of certain material and return list of them.
   Implement possibility of sorting items by price and date of manufacture in ascending or descending order.
 2. To adhere to python code conventions.
-3. TO separate project into packages.
+3. To separate project into packages.
 4. To minimalize using the console.
 5. To follow class diagram in terms of class attributes and methods.
 6. To use built-in python sort() function.
