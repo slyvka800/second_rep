@@ -21,20 +21,24 @@ class TablewareManager(object):
         self.list_of_find = []
         self.output_list = []
         self.output_str: str
+          
+    def sort_selection_by_price(self, selected_packages: list, sort_order=SortOrder.ASC):
+        selected_packages.sort(key=lambda item: item._price, reverse=sort_order.value)
+        return selected_packages
 
-    def sortByPrice(self, sort_order=SortOrder.ASC):
-        self.packages.sort(key=lambda item: item._price, reverse=sort_order.value)
-
-    def sortByManufactureDate(self, sort_order=SortOrder.ASC):
+    def sort_selection_by_manufacture_date(self, selected_packages: list, sort_order=SortOrder.ASC):
 
         def time_converter(package: PackageOfDisposableTableware):
             time_tuple = (package._date_of_manufacture[2], package._date_of_manufacture[1],
                           package._date_of_manufacture[0], 0, 0, 0, 0, 0, 0)
             return mktime(time_tuple)
 
-        self.packages.sort(key=lambda package: time_converter(package), reverse=sort_order.value)
+        selected_packages.sort(key=lambda package: time_converter(package), reverse=sort_order.value)
+        return selected_packages
 
-    def searchByMaterial(self, material: Material):
+    def search_by_material(self, material: Material):
+
+        self.list_of_find = []
 
         def find_material(package: PackageOfDisposableTableware):
             if package._material == material:
@@ -43,7 +47,7 @@ class TablewareManager(object):
         for item in self.packages:
             find_material(item)
 
-        return list(map(print, self.list_of_find))
+        return self.list_of_find
 
     def __str__(self):
         self.output_str = ''
