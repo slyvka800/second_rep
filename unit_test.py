@@ -282,6 +282,21 @@ class TestGlass(unittest.TestCase):
         assert glass_obj._color == "green"
         assert glass_obj._decorations == "dots"
 
+        
+class TestPep8(unittest.TestCase):
+
+    def test_pep8(self):
+        style = pep8.StyleGuide()
+        style.options.max_line_length = 120
+        filenames = []
+        for root, _, files in os.walk('~/PycharmProjects/Lab3'):
+            python_files = [f for f in files if f.endswith('.py')]
+            for file in python_files:
+                filename = '{0}/{1}'.format(root, file)
+                filenames.append(filename)
+        check = style.check_files(filenames)
+        self.assertEqual(check.total_errors, 0, 'PEP8 style errors: %d' % check.total_errors)        
+        
 
 if __name__ == '__main__':
     unittest.main
