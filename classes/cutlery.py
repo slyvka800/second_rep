@@ -1,9 +1,9 @@
-import classes.package_of_disposable_tableware as father
+from classes.package_of_disposable_tableware import *
 
 
-class Cutlery(father.PackageOfDisposableTableware):
-    def __init__(self, amount_of_pieces, origin_country: father.Country, type_of_dishes: father.Dishes,
-                 material: father.Material, price, brand, thickness: father.Thickness, date_of_manufacture: list,
+class Cutlery(PackageOfDisposableTableware):
+    def __init__(self, amount_of_pieces, origin_country: Country, type_of_dishes: Dishes,
+                 material: Material, price, brand, thickness: Thickness, date_of_manufacture: list,
                  length_in_inches):
         super().__init__(amount_of_pieces, origin_country, type_of_dishes, material, price, brand, thickness,
                          date_of_manufacture)
