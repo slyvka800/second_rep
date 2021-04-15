@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
@@ -47,17 +47,8 @@ items_schema = ItemSchema(many=True)
 # endpoint to create new item
 @app.route("/item", methods=["POST"])
 def add_item():
-    type_of_dishes = request.json['type_of_dishes']
-    amount_of_pieces = request.json['amount_of_pieces']
-    origin_country = request.json['origin_country']
-    material = request.json['material']
-    price = request.json['price']
-    brand = request.json['brand']
-    thickness = request.json['thickness']
-    date_of_manufacture = request.json['date_of_manufacture']
-
-    new_item = Item(type_of_dishes, amount_of_pieces, origin_country, material, price, brand, thickness,
-                    date_of_manufacture)
+    data = ItemSchema().load(request.json)
+    new_item = Item(**data)
 
     db.session.add(new_item)
     db.session.commit()
@@ -77,6 +68,10 @@ def get_item():
 @app.route("/item/<id>", methods=["GET"])
 def item_detail(id):
     item = Item.query.get(id)
+
+    if item is None:
+        abort(404)
+
     return item_schema.jsonify(item)
 
 
@@ -84,23 +79,14 @@ def item_detail(id):
 @app.route("/item/<id>", methods=["PUT"])
 def item_update(id):
     item = Item.query.get(id)
-    type_of_dishes = request.json['type_of_dishes']
-    amount_of_pieces = request.json['amount_of_pieces']
-    origin_country = request.json['origin_country']
-    material = request.json['material']
-    price = request.json['price']
-    brand = request.json['brand']
-    thickness = request.json['thickness']
-    date_of_manufacture = request.json['date_of_manufacture']
 
-    item.type_of_dishes = type_of_dishes
-    item.amount_of_pieces = amount_of_pieces
-    item.origin_country = origin_country
-    item.material = material
-    item.price = price
-    item.brand = brand
-    item.thickness = thickness
-    item.date_of_manufacture = date_of_manufacture
+    if item is None:
+        abort(404)
+
+    data = ItemSchema().load(request.json)
+
+    for i in data:
+        setattr(item, i, request.json[i])
 
     db.session.commit()
     return item_schema.jsonify(item)
@@ -110,6 +96,10 @@ def item_update(id):
 @app.route("/item/<id>", methods=["DELETE"])
 def item_delete(id):
     item = Item.query.get(id)
+
+    if item is None:
+        abort(404)
+
     db.session.delete(item)
     db.session.commit()
 
@@ -118,3 +108,4 @@ def item_delete(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
