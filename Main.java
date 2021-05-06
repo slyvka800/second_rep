@@ -32,6 +32,7 @@ public class Main {
                 .brand("Domdom")
                 .originCountry(Country.Ukraine)
                 .build();
+        
         var plate = Plate.builder()
                 .color("red")
                 .decoration("stripes")
@@ -39,6 +40,7 @@ public class Main {
                 .dateOfManufacture(new GregorianCalendar(2021, Calendar.MARCH, 12))
                 .price(120)
                 .build();
+        
         var fork = Forks.builder()
                 .dateOfManufacture(new GregorianCalendar(2019, Calendar.SEPTEMBER, 7))
                 .price(15)
