@@ -1,6 +1,8 @@
 package iot.ua;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Main {
@@ -12,7 +14,7 @@ public class Main {
                 .amountOfPieces(5)
                 .type(Dishes.Glasses)
                 .decoration("dots")
-                .dateOfManufacture(new int[] {12, 3, 2021})
+                .dateOfManufacture(new GregorianCalendar(2021, Calendar.APRIL, 12))
                 .material(Material.Paper)
                 .originCountry(Country.Ukraine)
                 .price(45)
@@ -26,7 +28,7 @@ public class Main {
                 .price(23)
                 .amountOfPieces(45)
                 .thickness(Thickness.High)
-                .dateOfManufacture(new int[] {1, 5, 2020})
+                .dateOfManufacture(new GregorianCalendar(2020, Calendar.MAY, 1))
                 .brand("Domdom")
                 .originCountry(Country.Ukraine)
                 .build();
@@ -34,11 +36,11 @@ public class Main {
                 .color("red")
                 .decoration("stripes")
                 .diameterInCm(2)
-                .dateOfManufacture(new int[] {12, 2, 2021})
+                .dateOfManufacture(new GregorianCalendar(2021, Calendar.MARCH, 12))
                 .price(120)
                 .build();
         var fork = Forks.builder()
-                .dateOfManufacture(new int[] {7, 8, 2019})
+                .dateOfManufacture(new GregorianCalendar(2019, Calendar.SEPTEMBER, 7))
                 .price(15)
                 .brand("Coconut Co.")
                 .material(Material.Paper)
@@ -53,6 +55,8 @@ public class Main {
 
         System.out.println(listOfItems);
         manager.sortByDate(listOfItems, SortOrder.ASC);
+        System.out.println(listOfItems);
+        manager.sortByDate(listOfItems, SortOrder.DESC);
         System.out.println(listOfItems);
 
     }
