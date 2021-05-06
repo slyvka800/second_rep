@@ -1,10 +1,11 @@
+/** I have used here Calendar instead of int[] to store dateOfManufacture
+ * because it is far more practical
+ */
 package iot.ua;
 
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import  java.util.*;
+import java.util.Calendar;
 
 @SuperBuilder
 @Data
@@ -16,7 +17,7 @@ public abstract class PackageOfDisposableTableware {
     private float price;
     private String brand;
     private Thickness thickness;
-    private int[] dateOfManufacture;
+    private Calendar dateOfManufacture;
 //    private List<Integer> dateOfManufacture;
 //    private List<Integer> MyList = new ArrayList<Integer>();
 }
