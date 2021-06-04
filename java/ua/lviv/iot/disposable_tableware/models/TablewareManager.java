@@ -15,24 +15,20 @@ public class TablewareManager {
         return founds;
     }
 
-    public void sortByPrice(List<PackageOfDisposableTableware> itemsForSort, SortOrder order) {
+    private void sortBy(List<PackageOfDisposableTableware> itemsForSort, SortOrder order,
+                             Comparator<PackageOfDisposableTableware> comparator) {
         if (order == SortOrder.ASC) {
-            itemsForSort.sort((PackageOfDisposableTableware first, PackageOfDisposableTableware second) ->
-                    (int) (first.getPrice() - second.getPrice()));
+            itemsForSort.sort(comparator);
         } else {
-            itemsForSort.sort((PackageOfDisposableTableware first, PackageOfDisposableTableware second) ->
-                    (int) (second.getPrice() - first.getPrice()));
+            itemsForSort.sort(comparator.reversed());
         }
     }
 
-    public void sortByDate(List<PackageOfDisposableTableware> itemsForSort, SortOrder order) {
-        if (order == SortOrder.ASC) {
-            itemsForSort.sort((PackageOfDisposableTableware first, PackageOfDisposableTableware second) ->
-                    first.getDateOfManufacture().compareTo(second.getDateOfManufacture()));
-        } else {
-            itemsForSort.sort((PackageOfDisposableTableware first, PackageOfDisposableTableware second) ->
-                    second.getDateOfManufacture().compareTo(first.getDateOfManufacture()));
-        }
+    public void sortByPrice(List<PackageOfDisposableTableware> itemsForSort, SortOrder order) {
+        sortBy(itemsForSort, order, Comparator.comparing(PackageOfDisposableTableware::getPrice));
+    }
 
+    public void sortByDate(List<PackageOfDisposableTableware> itemsForSort, SortOrder order) {
+        sortBy(itemsForSort, order, Comparator.comparing(PackageOfDisposableTableware::getDateOfManufacture));
     }
 }

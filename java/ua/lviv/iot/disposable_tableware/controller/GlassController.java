@@ -7,22 +7,31 @@ import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.disposable_tableware.models.*;
 import ua.lviv.iot.disposable_tableware.service.GlassService;
 
+import javax.management.InstanceNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 
 @RestController
 @RequestMapping(path = "/glass")
 public class GlassController {
 
+    private static final Logger LOGGER = Logger
+            .getLogger("ua.lviv.iot.disposable_tableware.controller.GlassController");
+
     @Autowired
     private GlassService glassService;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Glass> getGlass(@PathVariable Integer id) {
-        if (glassService.getGlass(id) != null) {
+        try {
             return new ResponseEntity<Glass>(glassService.getGlass(id), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            LOGGER.severe("Failed to get a glass with passed id");
+            return new ResponseEntity<Glass>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Glass>(HttpStatus.NOT_FOUND);
+
     }
 
     @GetMapping
@@ -31,34 +40,39 @@ public class GlassController {
     }
 
     @PostMapping
-    public Glass addGlass(@RequestBody Glass glass) {
-        return glassService.addGlass(glass);
+    public ResponseEntity<Glass> addGlass(@RequestBody Glass glass) {
+        if (glass.getId() == 0) {
+            return new ResponseEntity<Glass>(glassService.addGlass(glass), HttpStatus.OK);
+        }
+
+        LOGGER.severe("Failed to create a glass with passed id. Glass shouldn't have its own id");
+        return new ResponseEntity<Glass>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
     public ResponseEntity<Glass> updateGlass(@RequestBody Glass glass) {
-        if (glassService.getGlass(glass.getId()) != null) {
-            return new ResponseEntity<Glass>(glassService.updateGlass(glass), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<Glass>(HttpStatus.NOT_FOUND);
+        if (glass.getId() == 0) {
+            LOGGER.severe("Failed to update a glass without id. Glass should have external id");
+            return new ResponseEntity<Glass>(HttpStatus.BAD_REQUEST);
         }
-    }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<Glass> updateGlass(@PathVariable Integer id, @RequestBody Glass glass) {
-        if (glassService.getGlass(id) != null) {
-            return new ResponseEntity<Glass>(glassService.updateGlass(id, glass), HttpStatus.OK);
-        } else {
+        try {
+            return new ResponseEntity<Glass>(glassService.updateGlass(glass), HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            LOGGER.severe("Failed to update non-existing glass ");
             return new ResponseEntity<Glass>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Glass> deleteGlass(@PathVariable Integer id) {
-        if (glassService.getGlass(id) != null) {
+
+        try {
             return new ResponseEntity<Glass>(glassService.deleteGlass(id), HttpStatus.OK);
-        } else {
+        } catch (InstanceNotFoundException e) {
+            LOGGER.severe("Failed to delete non-existing glass ");
             return new ResponseEntity<Glass>(HttpStatus.NOT_FOUND);
         }
+
     }
 }
